@@ -5,7 +5,7 @@
 from flask import Flask
 from flask import abort
 from flask import jsonify
-from flask import request, Request
+from flask import request
 
 
 app = Flask(__name__)
