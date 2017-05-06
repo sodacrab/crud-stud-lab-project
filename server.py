@@ -34,8 +34,11 @@ def get(id):
 @app.route('/users', methods=['POST'])
 def add():
     """ Добавить нового пользователя """
-    if not request.json or request.json.keys() != {'name', 'phone'}:
+    if not request.json:
         abort(400)
+
+    if request.json.keys() != {'name', 'phone'}:
+        abort(422)
 
     request.json['id'] = users[-1]['id'] + 1 if len(users) else 1
     users.append(request.json)
@@ -46,14 +49,16 @@ def add():
 @app.route('/users/<int:id>', methods=['PUT'])
 def update(id):
     """ Обновить пользователя по ID """
-    if not request.json or request.json.keys() != {'name', 'phone'}:
+    if not request.json:
         abort(400)
+
+    if request.json.keys() != {'name', 'phone'}:
+        abort(422)
     
     index = next((i for i, x in enumerate(users) if x['id'] == id), None) or abort(404)
     users[index].update(request.json)
     
     return jsonify(message='ok')
-
 
 
 @app.route('/users/<int:id>', methods=['DELETE'])
@@ -69,6 +74,12 @@ def delete(id):
 def bad_request(e):
     """ кривой запрос """
     return jsonify(message='Bad request')
+
+
+@app.errorhandler(422)
+def unprocessable_entity(e):
+    """ запрос инвалида """
+    return jsonify(message='Unprocessable Entity')
 
 
 @app.errorhandler(404)
