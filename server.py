@@ -73,19 +73,19 @@ def delete(id):
 @app.errorhandler(400)
 def bad_request(e):
     """ кривой запрос """
-    return jsonify(message='Bad request')
+    return jsonify(message='Bad request'), 400
 
 
 @app.errorhandler(422)
 def unprocessable_entity(e):
     """ запрос инвалида """
-    return jsonify(message='Unprocessable Entity')
+    return jsonify(message='Unprocessable Entity'), 422
 
 
 @app.errorhandler(404)
 def not_found(e):
     """ потерянный юноша """
-    return jsonify(message='User not found')
+    return jsonify(message='User not found'), 404
 
 
 if __name__ == '__main__':
